@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GamePulse | Gaming news, events and reviews</title>
+  <style>
+    :root {
+      --bg: #13251f;
+      --panel: rgba(255, 255, 255, 0.1);
+      --panel-strong: rgba(255, 255, 255, 0.16);
+      --accent: #e95638;
+      --accent-dark: #cf4d33;
+      --ink: #101c18;
+      --white: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+      --line: rgba(255, 255, 255, 0.12);
+      --radius: 28px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--white);
+    }
+
+    img { max-width: 100%; display: block; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+
+    .top-ticker {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      background: #0d1714;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 10px 0;
+    }
+
+    .top-ticker-track {
+      display: inline-block;
+      padding-left: 100%;
+      animation: ticker 24s linear infinite;
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .site-header {
+      position: sticky;
+      top: 42px;
+      z-index: 50;
+      background: rgba(233, 86, 56, 0.96);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font-size: 1.15rem;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-links button,
+    .mobile-menu button {
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font-weight: 800;
+      text-transform: capitalize;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links button:hover,
+    .nav-links button.active,
+    .mobile-menu button:hover { color: var(--white); }
+
+    .menu-toggle {
+      display: none;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font-size: 1.7rem;
+    }
+
+    .mobile-menu {
+      display: none;
+      padding: 0 20px 18px;
+      border-top: 1px solid rgba(0, 0, 0, 0.12);
+    }
+
+    .mobile-menu.open {
+      display: grid;
+      gap: 14px;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 72px 20px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top left, rgba(233, 86, 56, 0.24), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 30%);
+      pointer-events: none;
+    }
+
+    .hero-grid {
+      position: relative;
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 0.8fr;
+      align-items: center;
+      gap: 42px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      padding: 9px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.92rem;
+      margin: 0 0 18px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(2.6rem, 7vw, 5.5rem);
+      line-height: 0.96;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      font-weight: 950;
+    }
+
+    h3 { margin: 0; }
+
+    .hero p.lead {
+      margin: 24px 0 0;
+      max-width: 690px;
+      color: var(--muted);
+      font-size: 1.15rem;
+      line-height: 1.75;
+    }
+
+    .hero-image-wrap {
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background: var(--panel);
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-image-wrap img {
+      width: 100%;
+      height: 360px;
+      object-fit: cover;
+      border-radius: 24px;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 56px 20px;
+    }
+
+    .stats-bar {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 20px 40px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .stat-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 2rem;
+      font-weight: 950;
+      margin-bottom: 8px;
+    }
+
+    .featured-strip {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 10px 20px 60px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .featured-mini {
+      position: relative;
+      min-height: 280px;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+
+    .featured-mini img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .featured-overlay {
+      position: absolute;
+      inset: 0;
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.15));
+    }
+
+    .featured-overlay h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .ticker {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,0.04);
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 14px 0;
+      margin-top: 20px;
+    }
+
+    .ticker-track {
+      display: inline-block;
+      padding-left: 100%;
+      animation: ticker 28s linear infinite;
+      font-weight: 700;
+      color: rgba(255,255,255,0.82);
+    }
+
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .footer {
+      margin-top: 80px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .footer-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 60px 20px;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr 1fr;
+      gap: 32px;
+    }
+
+    .footer h3 {
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+
+    .footer p,
+    .footer li,
+    .footer a {
+      color: var(--muted);
+      line-height: 1.7;
+      text-decoration: none;
+      list-style: none;
+    }
+
+    .footer ul {
+      padding: 0;
+      margin: 0;
+    }
+
+    .home-cards,
+    .event-grid,
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .home-card,
+    .event-card,
+    .blog-card,
+    .story-card,
+    .contact-panel {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+    }
+
+    .home-card {
+      min-height: 220px;
+      padding: 32px;
+      color: var(--white);
+      text-align: left;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .home-card:first-child {
+      background: var(--accent);
+      color: var(--ink);
+    }
+
+    .home-card:hover,
+    .story-card:hover,
+    .event-card:hover,
+    .blog-card:hover {
+      transform: translateY(-5px);
+      background: var(--panel-strong);
+    }
+
+    .home-card .icon { font-size: 2rem; margin-bottom: 22px; }
+    .home-card h2 { font-size: 1.65rem; }
+    .home-card p { color: inherit; opacity: 0.75; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: min(100%, 340px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--panel);
+      padding: 12px 14px;
+    }
+
+    .search-box input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--white);
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 32px;
+    }
+
+    .filter-btn {
+      border: 0;
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--muted);
+      padding: 10px 16px;
+      font-weight: 800;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .news-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 24px;
+    }
+
+    .featured-card {
+      border-radius: 32px;
+      background: var(--accent);
+      overflow: hidden;
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .featured-card img {
+      width: 100%;
+      height: 310px;
+      object-fit: cover;
+    }
+
+    .featured-content { padding: 30px; }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .featured-card h2 { font-size: 2.2rem; }
+    .featured-card p { color: rgba(255, 255, 255, 0.84); line-height: 1.6; }
+
+    .side-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .story-card img,
+    .event-card img,
+    .blog-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .event-card img,
+    .blog-card img { height: 210px; }
+
+    .card-body { padding: 22px; }
+    .card-body p { color: var(--muted); line-height: 1.6; }
+    .small-meta { color: rgba(255, 255, 255, 0.58); font-size: 0.82rem; margin-bottom: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 0;
+      border-radius: 18px;
+      background: var(--accent);
+      color: var(--white);
+      padding: 13px 18px;
+      font-weight: 900;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .btn:hover { background: var(--accent-dark); transform: translateY(-1px); }
+    .btn.dark { background: var(--bg); }
+    .btn.ghost { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line); }
+    .text-link {
+      border: 0;
+      background: transparent;
+      color: #ff8d73;
+      padding: 0;
+      font-weight: 900;
+    }
+
+    .contact-panel {
+      display: grid;
+      grid-template-columns: 0.8fr 1fr;
+      gap: 34px;
+      padding: 40px;
+    }
+
+    .contact-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--bg);
+      color: var(--white);
+      padding: 14px 16px;
+      outline: 0;
+    }
+
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus { border-color: var(--accent); }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(8px);
+    }
+
+    .modal.open { display: flex; }
+
+    .modal-box {
+      width: min(100%, 780px);
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-box img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 32px 32px 0 0;
+    }
+
+    .modal-content { padding: 34px; }
+    .modal-content h2 { font-size: clamp(2rem, 5vw, 3rem); }
+    .modal-content p { color: var(--muted); line-height: 1.75; font-size: 1.05rem; }
+    .source-box {
+      margin-top: 28px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+    }
+
+    .source-box a {
+      display: inline-block;
+      color: var(--white);
+      font-size: 1.25rem;
+      font-weight: 900;
+      text-decoration: none;
+      margin-top: 6px;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .empty-state {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 28px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .stats-bar,
+      .featured-strip,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-grid,
+      .news-grid,
+      .contact-panel { grid-template-columns: 1fr; }
+      .home-cards,
+      .event-grid,
+      .blog-grid { grid-template-columns: 1fr; }
+      .section-head { align-items: stretch; flex-direction: column; }
+      .search-box { width: 100%; }
+    }
+
+    @media (max-width: 760px) {
+      .nav-links { display: none; }
+      .menu-toggle { display: block; }
+      .side-grid { grid-template-columns: 1fr; }
+      .hero { padding: 54px 20px; }
+      .hero-image-wrap img { height: 260px; }
+      .contact-panel { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-ticker">
+    <div class="top-ticker-track">
+      🔥 BREAKING: GTA VI community spots possible hidden teaser · 🎮 PlayStation Showcase rumours intensify · 🏆 Counter-Strike finals hit peak Twitch viewership · 🚀 New survival MMO enters closed beta this week · 📈 Steam breaks concurrent player records again · 🎧 Major headset brand announces low-latency wireless lineup
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="nav">
+      <button class="logo" data-page="home">GamePulse</button>
+      <div class="nav-links" id="navLinks">
+        <button data-page="home" class="active">Home</button>
+        <button data-page="news">News</button>
+        <button data-page="upcoming">Upcoming</button>
+        <button data-page="blog">Blog</button>
+        <button data-page="contact">Contact us</button>
+      </div>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu">
+      <button data-page="home">Home</button>
+      <button data-page="news">News</button>
+      <button data-page="upcoming">Upcoming</button>
+      <button data-page="blog">Blog</button>
+      <button data-page="contact">Contact us</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page active" id="homePage">
+      <div class="hero">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">Gaming news, reviews, events, and community updates</p>
+            <h1>Your hub for gaming news, reveals, and esports.</h1>
+            <p class="lead">A gaming-focused news site with trailer coverage, reviews, real upcoming events, blog features, search, filters, and separate pages.</p>
+          </div>
+          <div class="hero-image-wrap">
+            <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=1000&q=80" alt="Gaming desk setup" />
+          </div>
+        </div>
+      </div>
+
+      <div class="featured-strip">
+        <article class="featured-mini">
+          <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80" alt="Esports arena" />
+          <div class="featured-overlay">
+            <p class="kicker">Esports</p>
+            <h3>International finals break streaming records</h3>
+            <p>Viewership climbs across Twitch and YouTube.</p>
+          </div>
+        </article>
+
+        <article class="featured-mini">
+          <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=900&q=80" alt="Gaming setup" />
+          <div class="featured-overlay">
+            <p class="kicker">Hardware</p>
+            <h3>Next-gen GPU shortages continue worldwide</h3>
+            <p>Retailers struggle to maintain stock levels.</p>
+          </div>
+        </article>
+
+        <article class="featured-mini">
+          <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=900&q=80" alt="Retro gaming" />
+          <div class="featured-overlay">
+            <p class="kicker">Indie spotlight</p>
+            <h3>Retro-inspired games dominate Steam charts</h3>
+            <p>Pixel-art releases continue strong momentum.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="container">
+        <div class="home-cards">
+          <button class="home-card" data-page="upcoming">
+            <div class="icon">📅</div>
+            <h2>Upcoming</h2>
+            <p>Track showcases, tournaments, expos, and real gaming events.</p>
+          </button>
+          <button class="home-card" data-page="blog">
+            <div class="icon">🎮</div>
+            <h2>Blog</h2>
+            <p>Read opinion pieces, guides, and meta breakdowns.</p>
+          </button>
+          <button class="home-card" data-page="contact">
+            <div class="icon">🏆</div>
+            <h2>Submit news</h2>
+            <p>Send game leaks, reviews, events, or esports tips.</p>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="newsPage">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="kicker">Latest updates</p>
+            <h1>Gaming news and reviews</h1>
+          </div>
+          <label class="search-box">
+            <span>🔎</span>
+            <input id="searchInput" type="search" placeholder="Search stories" />
+          </label>
+        </div>
+
+        <div class="filters" id="filters"></div>
+        <div id="newsContent"></div>
+      </div>
+    </section>
+
+    <section class="page" id="upcomingPage">
+      <div class="hero">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">Upcoming</p>
+            <h1>Real gaming events with verified locations.</h1>
+            <p class="lead">Browse major gaming showcases and expos with confirmed dates, venue names, locations, images, and official source links.</p>
+          </div>
+          <div class="hero-image-wrap">
+            <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=1000&q=80" alt="Crowd at a live event" />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="event-grid" id="eventGrid"></div>
+      </div>
+    </section>
+
+    <section class="page" id="blogPage">
+      <div class="hero">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">Blog</p>
+            <h1>Guides, explainers, and longer updates.</h1>
+            <p class="lead">A separate blog page gives visitors space to read deeper posts without crowding the homepage.</p>
+          </div>
+          <div class="hero-image-wrap">
+            <img src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1000&q=80" alt="Writing desk" />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="blog-grid" id="blogGrid"></div>
+      </div>
+    </section>
+
+    <section class="page" id="contactPage">
+      <div class="hero">
+        <div class="hero-grid">
+          <div>
+            <p class="eyebrow">Contact us</p>
+            <h1>Send a story, event, or update.</h1>
+            <p class="lead">Use the form to send news tips, upcoming event details, blog ideas, or general questions.</p>
+          </div>
+          <div class="hero-image-wrap">
+            <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1000&q=80" alt="Laptop contact form" />
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="contact-panel">
+          <div>
+            <p class="kicker">Contact us</p>
+            <h2>Get in touch</h2>
+            <p class="lead">The form validates required fields and confirms submission, so the page feels complete and usable.</p>
+            <p>📧 hello@gamepulse.example</p>
+          </div>
+          <form class="contact-form" id="contactForm">
+            <input required name="name" placeholder="Your name" />
+            <input required type="email" name="email" placeholder="Email address" />
+            <select name="topic">
+              <option>News tip</option>
+              <option>Upcoming event</option>
+              <option>Blog idea</option>
+              <option>General message</option>
+            </select>
+            <textarea required name="message" rows="5" placeholder="Message"></textarea>
+            <button class="btn" type="submit">Send message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h2>GamePulse</h2>
+        <p>Independent gaming news coverage focused on releases, esports, hardware, industry trends, showcases, and community events.</p>
+      </div>
+
+      <div>
+        <h3>Sections</h3>
+        <ul>
+          <li><a href="#">News</a></li>
+          <li><a href="#">Reviews</a></li>
+          <li><a href="#">Events</a></li>
+          <li><a href="#">Esports</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Platforms</h3>
+        <ul>
+          <li>PC Gaming</li>
+          <li>PlayStation</li>
+          <li>Xbox</li>
+          <li>Nintendo</li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+  <div class="modal" id="storyModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <img id="modalImage" src="" alt="" />
+      <div class="modal-content">
+        <div class="meta" id="modalMeta"></div>
+        <h2 id="modalTitle"></h2>
+        <p id="modalText"></p>
+        <div class="source-box">
+          <p class="kicker">Source</p>
+          <a id="modalSource" href="#" target="_blank" rel="noopener noreferrer"></a>
+          <p>Story inspired by reporting and coverage from a recognised gaming publication.</p>
+        </div>
+        <div class="modal-actions">
+          <a class="btn" id="modalVisit" href="#" target="_blank" rel="noopener noreferrer">Visit source</a>
+          <button class="btn ghost" id="closeModal">Close story</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const articles = [
+      {
+        id: 1,
+        title: "New sci-fi RPG trailer reveals co-op raids and mech combat",
+        category: "News",
+        date: "24 May",
+        readTime: "4 min read",
+        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=900&q=80",
+        summary: "The latest gameplay preview shows squad missions, boss arenas, upgrade trees, and fast third-person combat.",
+        source: "IGN",
+        sourceUrl: "https://www.ign.com",
+        content: "IGN reports that the upcoming sci-fi RPG expands its online systems with large-scale co-op raids, customizable mech loadouts, and dynamic world events. Developers also confirmed seasonal content updates, cross-platform progression, and dedicated PvE challenge modes aimed at long-term multiplayer support.",
+        featured: true
+      },
+      {
+        id: 2,
+        title: "Indie platformer demo climbs the Steam wishlist chart",
+        category: "Reviews",
+        date: "27 May",
+        readTime: "3 min read",
+        image: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=700&q=80",
+        summary: "Tight movement, pixel art, and speedrun-friendly levels make this one to watch before launch.",
+        source: "GameSpot",
+        sourceUrl: "https://www.gamespot.com",
+        content: "GameSpot highlighted the demo's responsive controls, hidden movement tech, and replay-focused level design. Early players praised the soundtrack and fast restart system, comparing the flow to modern speedrunning platformers with arcade-style precision."
+      },
+      {
+        id: 3,
+        title: "Console update adds Discord streaming and capture tools",
+        category: "News",
+        date: "1 Jun",
+        readTime: "3 min read",
+        image: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=700&q=80",
+        summary: "Players can stream directly to voice channels, trim clips faster, and manage party audio from the dashboard.",
+        source: "The Verge",
+        sourceUrl: "https://www.theverge.com",
+        content: "According to The Verge, the latest console software update focuses heavily on creator tools and social integration. The patch improves clip management, lowers stream latency, and introduces better voice-channel controls for multiplayer parties."
+      },
+      {
+        id: 4,
+        title: "Summer showcase watch party announced for Friday night",
+        category: "Upcoming",
+        date: "8 Jun",
+        readTime: "2 min read",
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=700&q=80",
+        summary: "Join the live reaction room for reveals, release dates, trailers, and post-show predictions.",
+        source: "PC Gamer",
+        sourceUrl: "https://www.pcgamer.com",
+        content: "PC Gamer expects multiple publisher reveals during the summer showcase season, including updates on long-awaited RPGs, competitive shooters, and indie titles. The community event page includes live reactions, polls, and post-show breakdowns."
+      },
+      {
+        id: 5,
+        title: "Why extraction shooters are taking over multiplayer design",
+        category: "Blog",
+        date: "12 Jun",
+        readTime: "6 min read",
+        image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=700&q=80",
+        summary: "Risk, loot, squad tension, and short sessions explain why the format keeps spreading across genres.",
+        source: "Eurogamer",
+        sourceUrl: "https://www.eurogamer.net",
+        content: "Eurogamer notes that extraction shooters continue to grow because they combine survival pressure, persistent rewards, and unpredictable player encounters. Developers are increasingly adapting the format into fantasy, sci-fi, and tactical settings."
+      }
+    ];
+
+    const upcomingEvents = [
+      {
+        title: "Summer Game Fest 2026",
+        date: "5 June 2026",
+        location: "Dolby Theatre, Hollywood, Los Angeles, California, USA",
+        image: "https://images.unsplash.com/photo-1603190287605-e6ade32fa852?auto=format&fit=crop&w=800&q=80",
+        description: "Geoff Keighley's flagship summer games showcase, featuring new game announcements, trailers, and live audience reveals.",
+        source: "Summer Game Fest",
+        sourceUrl: "https://www.summergamefest.com/"
+      },
+      {
+        title: "gamescom 2026",
+        date: "26–30 August 2026",
+        location: "Koelnmesse, Messeplatz 1, 50679 Cologne, Germany",
+        image: "https://images.unsplash.com/photo-1591115765373-5207764f72e7?auto=format&fit=crop&w=800&q=80",
+        description: "One of the world's largest video game events, with publisher booths, playable demos, esports, hardware, and Opening Night Live week activity.",
+        source: "gamescom",
+        sourceUrl: "https://www.gamescom.global/en"
+      },
+      {
+        title: "Tokyo Game Show 2026",
+        date: "17–21 September 2026",
+        location: "Makuhari Messe, 2-1 Nakase, Mihama-ku, Chiba, Japan",
+        image: "https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80",
+        description: "Japan's major gaming expo returns as a five-day event with business days, public days, online programming, and publisher showcases.",
+        source: "Tokyo Game Show / Makuhari Messe event listings",
+        sourceUrl: "https://www.m-messe.co.jp/en/event/detail/8308"
+      }
+    ];
+
+    const blogPosts = [
+      {
+        title: "How battle passes changed the way games are updated",
+        author: "Meta desk",
+        date: "2 Jun",
+        image: "https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=800&q=80",
+        summary: "A clear look at seasons, rewards, player retention, and where live-service design can go wrong."
+      },
+      {
+        title: "The best settings to check before playing competitive shooters",
+        author: "Setup guide",
+        date: "9 Jun",
+        image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=800&q=80",
+        summary: "Tweak sensitivity, field of view, audio mix, frame rate, and crosshair visibility before ranked play."
+      },
+      {
+        title: "Why indie horror keeps beating big-budget scares",
+        author: "Feature team",
+        date: "15 Jun",
+        image: "https://images.unsplash.com/photo-1523843268911-45a882919fec?auto=format&fit=crop&w=800&q=80",
+        summary: "Small teams use sound, pacing, and strange mechanics to build fear without blockbuster budgets."
+      }
+    ];
+
+    const categories = ["All", "News", "Reviews", "Upcoming", "Blog"];
+    let activeCategory = "All";
+    let searchQuery = "";
+
+    const pages = {
+      home: document.getElementById("homePage"),
+      news: document.getElementById("newsPage"),
+      upcoming: document.getElementById("upcomingPage"),
+      blog: document.getElementById("blogPage"),
+      contact: document.getElementById("contactPage")
+    };
+
+    function goTo(pageName) {
+      Object.entries(pages).forEach(([name, element]) => {
+        element.classList.toggle("active", name === pageName);
+      });
+
+      document.querySelectorAll("[data-page]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.page === pageName);
+      });
+
+      document.getElementById("mobileMenu").classList.remove("open");
+      closeStoryModal();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderFilters() {
+      const filterWrap = document.getElementById("filters");
+      filterWrap.innerHTML = categories.map((category) => `
+        <button class="filter-btn ${category === activeCategory ? "active" : ""}" data-category="${category}">${category}</button>
+      `).join("");
+
+      filterWrap.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeCategory = button.dataset.category;
+          renderNews();
+        });
+      });
+    }
+
+    function getFilteredArticles() {
+      return articles.filter((article) => {
+        const matchesCategory = activeCategory === "All" || article.category === activeCategory;
+        const text = `${article.title} ${article.summary} ${article.category}`.toLowerCase();
+        const matchesQuery = text.includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesQuery;
+      });
+    }
+
+    function renderNews() {
+      renderFilters();
+      const content = document.getElementById("newsContent");
+      const filtered = getFilteredArticles();
+
+      if (!filtered.length) {
+        content.innerHTML = `<div class="empty-state">No matching stories found.</div>`;
+        return;
+      }
+
+      const featured = filtered.find((article) => article.featured) || filtered[0];
+      const sideArticles = filtered.filter((article) => article.id !== featured.id).slice(0, 4);
+
+      content.innerHTML = `
+        <div class="news-grid">
+          <article class="featured-card">
+            <img src="${featured.image}" alt="${featured.title}" />
+            <div class="featured-content">
+              <div class="meta"><span>${featured.category}</span><span>•</span><span>${featured.date}</span><span>•</span><span>${featured.readTime}</span></div>
+              <h2>${featured.title}</h2>
+              <p>${featured.summary}</p>
+              <button class="btn dark" data-story="${featured.id}">Read featured story</button>
+            </div>
+          </article>
+          <div class="side-grid">
+            ${sideArticles.map((article) => `
+              <article class="story-card">
+                <img src="${article.image}" alt="${article.title}" />
+                <div class="card-body">
+                  <div class="small-meta">⏱ ${article.date} · ${article.readTime}</div>
+                  <h3>${article.title}</h3>
+                  <p>${article.summary}</p>
+                  <button class="text-link" data-story="${article.id}">Read full story</button>
+                </div>
+              </article>
+            `).join("")}
+          </div>
+        </div>
+      `;
+
+      content.querySelectorAll("[data-story]").forEach((button) => {
+        button.addEventListener("click", () => openStoryModal(Number(button.dataset.story)));
+      });
+    }
+
+    function renderEvents() {
+      document.getElementById("eventGrid").innerHTML = upcomingEvents.map((event) => `
+        <article class="event-card">
+          <img src="${event.image}" alt="${event.title}" />
+          <div class="card-body">
+            <div class="small-meta">📅 ${event.date}</div>
+            <h3>${event.title}</h3>
+            <p>📍 ${event.location}</p>
+            <p>${event.description}</p>
+            <a class="btn" href="${event.sourceUrl}" target="_blank" rel="noopener noreferrer">View official source</a>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderBlog() {
+      document.getElementById("blogGrid").innerHTML = blogPosts.map((post) => `
+        <article class="blog-card">
+          <img src="${post.image}" alt="${post.title}" />
+          <div class="card-body">
+            <div class="small-meta">${post.date} · ${post.author}</div>
+            <h3>${post.title}</h3>
+            <p>${post.summary}</p>
+            <button class="btn">Read post</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function openStoryModal(articleId) {
+      const article = articles.find((item) => item.id === articleId);
+      if (!article) return;
+
+      document.getElementById("modalImage").src = article.image;
+      document.getElementById("modalImage").alt = article.title;
+      document.getElementById("modalMeta").innerHTML = `<span>${article.category}</span><span>•</span><span>${article.date}</span><span>•</span><span>${article.readTime}</span>`;
+      document.getElementById("modalTitle").textContent = article.title;
+      document.getElementById("modalText").textContent = article.content;
+      document.getElementById("modalSource").textContent = article.source;
+      document.getElementById("modalSource").href = article.sourceUrl;
+      document.getElementById("modalVisit").href = article.sourceUrl;
+      document.getElementById("storyModal").classList.add("open");
+      document.getElementById("storyModal").setAttribute("aria-hidden", "false");
+    }
+
+    function closeStoryModal() {
+      const modal = document.getElementById("storyModal");
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    }
+
+    document.querySelectorAll("[data-page]").forEach((button) => {
+      button.addEventListener("click", () => goTo(button.dataset.page));
+    });
+
+    document.getElementById("menuToggle").addEventListener("click", () => {
+      document.getElementById("mobileMenu").classList.toggle("open");
+    });
+
+    document.getElementById("searchInput").addEventListener("input", (event) => {
+      searchQuery = event.target.value;
+      renderNews();
+    });
+
+    document.getElementById("contactForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      alert("Thanks. Your message has been sent.");
+      event.currentTarget.reset();
+    });
+
+    document.getElementById("closeModal").addEventListener("click", closeStoryModal);
+    document.getElementById("storyModal").addEventListener("click", (event) => {
+      if (event.target.id === "storyModal") closeStoryModal();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeStoryModal();
+    });
+
+    renderNews();
+    renderEvents();
+    renderBlog();
+  </script>
+</body>
+</html>
